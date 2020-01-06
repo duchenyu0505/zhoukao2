@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dcy.dao.ColumnDao">
+	<insert id="insert">
+		insert into col values
+		<foreach collection="list" item="l" separator=",">
+		(null,#{l.desc},#{l.name},#{l.keyword},#{l.address},#{l.money},#{l.birth},#{l.year},#{l.status},#{l.bz})
+		</foreach>
+	</insert>
+	
+	<select id="list" resultType="Column">
+		select * from col
+		<where>
+			<if test="con.id!=null and con.id!=0">and col.id like '%${con.id}%'</if>
+			<if test="con.desc!=null and con.desc!=''">and desc like '%${con.desc}%'</if>
+			<if test="con.name!=null and con.name!=''">and col.name like '%${con.name}%'</if>
+			<if test="con.keyword!=null and con.keyword!=''">and keyword like '%${con.keyword}%'</if>
+			<if test="con.maxMen!=null and con.maxMen!=0">and money &lt; #{con.maxMen}</if>
+			<if test="con.minMen!=null and con.minMen!=0">and money &gt; #{con.minMen}</if>
+			<if test="con.bmin!=null and con.bmin!=''">and birth &gt; #{con.bmin}</if>	
+			<if test="con.bmax!=null and con.bmax!=''">and birth &lt; #{con.bax}</if>
+			<if test="con.ymin!=null and con.ymin!=''">and year &gt; #{con.ymin}</if>	
+			<if test="con.ymax!=null and con.ymax!=''">and year &lt; #{con.ymax}</if>		
+		</where>
+	</select>
+	
+	<select id="toUpdate" resultType="Column">
+		select * from col where id=#{id}
+	</select>
+	
+	<update id="update">
+		<!-- UPDATE `col` SET  `desc`=#{desc}, `name`=#{name}, `keyword`=#{keyword}, `address`=#{address}, `money`=#{money}, `birth`=#{birth}, `year`=#{year}, `status`=#{status}, `bz`='#{bz} WHERE (`id`=#{id}); -->
+		UPDATE `col` SET `money`=#{money},`keyword`=#{keyword},`name`=#{name},`birth`=#{birth} WHERE (`id`=#{id});
+	</update>
+</mapper>
